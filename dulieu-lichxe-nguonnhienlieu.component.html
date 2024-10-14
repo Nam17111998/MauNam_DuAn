@@ -1,0 +1,66 @@
+<app-generic-page pageTitle="Danh sách nguồn nhiên liệu hàng năm">
+    <!-- Lọc theo năm -->
+    <ng-container main-filters>
+        <app-dropdown-nam [(nam)]="nam" (namChange)="handleChangeNam($event)">
+        </app-dropdown-nam>
+    </ng-container>
+    <!-- end lọc  -->
+    <!-- Thêm mới  -->
+    <ng-container buttons>
+        <dx-button class="custom-button" text="Thêm mới" [icon]="dxButtonConfig.add_icon"
+            [type]="dxButtonConfig.add_type" (click)="OpenPopUp()">
+        </dx-button>
+        <!-- <app-print [dataSource]="dataSource" [dataGrid]="dataGrid" [pageIndex]="pageIndex" [pageSize]="pageSize"></app-print> -->
+        <app-print
+        [dataGrid]="dataGrid"
+        [dataSource]="dataSource"
+        [gridTitle]="'Nguồn nhiên liệu'"
+        [summaryConfigs]="summaryConfigs"
+        [groupConfigs]="groupConfigs"
+      ></app-print>
+    </ng-container>
+    <!-- end thêm mới -->
+
+    <ng-container body>
+        <dx-data-grid #dataGrid [dataSource]="items" keyExpr="IdNhienLieu" [hoverStateEnabled]="true" [focusedRowKey]="focusKey"
+            [focusedRowEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+            (onFocusedRowChanged)="onFocusedRowChanged($event)" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+            [showBorders]="true" [showRowLines]="true" >
+            <!-- Ngăn bảng datagrid tự động phân trang -->
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <!-- Bảng dữ liệu -->
+          
+            <dxi-column dataField="Nam" caption="Năm" [width]="100" alignment="center"
+                cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="TenNguonXangDau" caption="Nguồn nhiên liệu" [minWidth]="200" alignment="center"
+                cssClass="vertical-middle"></dxi-column>
+            <dxi-column dataField="TenLoaiXangDau" caption="Loại Xăng Dầu" [minWidth]="200" alignment="center"
+                cssClass="vertical-middle"></dxi-column>
+            <dxi-column [format]="{style:'decimal',precision:2,useGrouping:false}" dataField="KhoiLuong" caption="Khối Lượng" [minWidth]="200" alignment="center"
+                cssClass="vertical-middle"></dxi-column>
+            <dxi-column cellTemplate="cellAction" [width]="80" alignment="center" [showInColumnChooser]="false"
+                cssClass="vertical-middle"></dxi-column>
+
+            <!-- Nút -->
+            <div class="rowAction" *dxTemplate="let row of 'cellAction'">
+                <span class="dx-icon-edit" (click)="update(row.data.IdNhienLieu)"></span>
+                <span class="dx-icon-close" (click)="delete(row.data.IdNhienLieu, row.data.Nam)"></span>
+            </div>
+            <!-- Hết nút -->
+        </dx-data-grid>
+        <!-- <dx-button
+        text="In dữ liệu"
+        (onClick)="printData()">
+    </dx-button> -->
+   
+        <!-- <app-paginator [(page)]="pageIndex" [(pageSize)]="pageSize" [totalRows]="totalRows" [pageSizes]="pageSizes" [nameData]="nameData"
+        (onPageChanged)="pageChanged($event)" (onPageSizeChanged)="pageSizeChanged($event)"></app-paginator> -->
+     
+            <app-phantrang [(pageSize)]="pageSize" [pageSizes]="pageSizes" [nameData]="nameData" [totalRows]="totalRows" [(page)]="pageIndex"  (pageChange)="pageChanged($event)" (pageSizeChange)="pageSizeChanged($event)" ></app-phantrang>
+    </ng-container>
+</app-generic-page>
+
+<dx-popup color="blue" title="Nguồn nhiên liệu"  height="auto" width="600" [(visible)]="isOpenAddForm" >
+    <app-form-nguonnhienlieu  (closePopup)="closePopup($event)" (IdAdded)="getId($event)"  [idNhienLieu]="currentId" (updateData)="onDataUpdated($event)"></app-form-nguonnhienlieu>
+</dx-popup>
+
