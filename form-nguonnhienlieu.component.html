@@ -1,0 +1,36 @@
+<!-- <dx-validation-group> -->
+<form class="p-4" (submit)="saveData($event)">
+  <div class="row">
+    <div class="col-6">
+      <label class="form-label">Năm</label>
+      <app-dropdown-nam  [(nam)]="item.Nam" [isValidate]="true"></app-dropdown-nam>
+    </div>
+    <div class="col-6">
+      <label class="form-label">Nguồn Xăng Dầu</label>
+      <app-dropdown-nguonxangdau [isValidate]="true"  [(maNguonXangDau)]="item.MaNguonXangDau">
+      </app-dropdown-nguonxangdau>
+    </div>
+  </div>
+  <div>
+    
+  </div>
+  <div>
+    <label class="form-label" >Loại Xăng Dầu</label>
+    <app-dropdown-loaixangdau [isValidation]="true" [(maLoaiXangDau)]="item.MaLoaiXangDau"></app-dropdown-loaixangdau>
+    
+  </div>
+  <div>
+    <label class="form-label">Khối Lượng</label>
+    <dx-number-box [placeholder]="'Nhập khối lượng'" [(value)]="item.KhoiLuong">
+      <dx-validator>
+        <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+      </dx-validator>
+    </dx-number-box>
+  </div>
+  <div class="mt-2" style="text-align: right;">
+    <dx-button [useSubmitBehavior]="true" 
+        [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" text="Lưu" ></dx-button>
+  </div>
+  
+  <!-- <dxi-item itemType="button" [buttonOptions]="{ text: 'Lưu', onClick: saveData.bind(this) }"></dxi-item> -->
+</form>
