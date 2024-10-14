@@ -1,0 +1,43 @@
+<dx-scroll-view>
+    <dx-validation-group #validationEntity>
+      <div class="field">
+        <label>Mã:</label>
+        <dx-text-box [readOnly]="readOnly || state=='edit'" [(value)]="entity.MaNguonXangDau">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+            <dxi-validation-rule type="custom" message="Mã nguồn xăng dầu đã tồn tại!" [ignoreEmptyValue]="true"
+                              [validationCallback]="validationExiting"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+      <div class="field">
+        <label>Nguồn xăng dầu:</label>
+        <dx-text-box [readOnly]="readOnly" [(value)]="entity.TenNguonXangDau">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Yêu cầu thông tin"></dxi-validation-rule>
+            
+          </dx-validator>
+        </dx-text-box>
+      </div>
+      <div class="field">
+        <label>Thứ tự:</label>
+        <dx-number-box [readOnly]="readOnly" [step]="1" format="#0" [(value)]="entity.STT">
+        </dx-number-box>
+      </div>
+      <!-- <div class="field">
+        <label>Diễn giải:</label>
+        <dx-text-area [readOnly]="readOnly" [maxHeight]="400" [autoResizeEnabled]="true" [(value)]="entity.DienGiai">
+        </dx-text-area>
+      </div> -->
+      <div class="field">
+        <label>Ghi chú:</label>
+        <dx-text-area [readOnly]="readOnly" [maxHeight]="400" [autoResizeEnabled]="true" [(value)]="entity.GhiChu">
+        </dx-text-area>
+      </div>
+      <div class="field">
+        <label>Kích hoạt:</label>
+        <dx-check-box [readOnly]="readOnly" [(value)]="entity.KichHoat"></dx-check-box>
+      </div>
+    </dx-validation-group>
+  </dx-scroll-view>
+  
