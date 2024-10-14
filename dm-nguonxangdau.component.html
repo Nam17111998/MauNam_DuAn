@@ -1,0 +1,98 @@
+
+<div class="widget-header">
+    <dx-toolbar>
+      <dxi-item location="before" widget="dxButton" locateInMenu="never">
+        <div *dxTemplate>
+          <div class="toolbar-label">
+            {{ title | uppercase }}
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item location="after" widget="dxButton" locateInMenu="never">
+        <div appPermission appRole="DM_NGUONXANGDAU" permissionCode="ADD" *dxTemplate>
+          <dx-button class="custom-button" text="Thêm mới" [icon]="dxButtonConfig.add_icon" [type]="dxButtonConfig.add_type" (click)="add()">
+          </dx-button>
+          <!-- <app-print [dataSource]="dataSource" [dataGrid]="dataGrid" [pageIndex]="pageIndex" [pageSize]="pageSize"></app-print> -->
+          <app-print
+          [dataGrid]="dataGrid"
+          [dataSource]="dataSource"
+          [gridTitle]="'Nguồn nhiên liệu'"
+          [summaryConfigs]="summaryConfigs"
+          [groupConfigs]="groupConfigs"
+        ></app-print>
+        </div>
+      </dxi-item>
+    </dx-toolbar>
+  </div>
+  <div class="view-card-body">
+    <div class="card-content">
+      <!-- Bar -->
+      <div class="bar">
+        <div class="input-group">
+          <dx-text-box mode="search" [placeholder]="placeholderSearch" [(value)]="textSearch" (onEnterKey)="onFilter()">
+            <dxi-button name="filter" location="after" [options]="optionsBtnFilter"></dxi-button>
+          </dx-text-box>
+        </div>
+        <div class="slide-buton">
+          <dx-button [icon]="isShowDetail? 'chevronright': 'chevronleft'" [type]="dxButtonConfig.slide_type"
+            (click)="toggleDetail()"></dx-button>
+        </div>
+      </div>
+      <!-- End Bar -->
+      <!-- Grid -->
+      <div class="content">
+        <dx-data-grid #dataGrid [dataSource]="allData" keyExpr="MaNguonXangDau" [hoverStateEnabled]="true" [focusedRowKey]="focusKey"
+          [focusedRowEnabled]="true" [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+          (onFocusedRowChanged)="onFocusedRowChanged($event)" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+          [showBorders]="true" [showRowLines]="true">
+          <dxo-header-filter [visible]="false"></dxo-header-filter>
+          <dxo-selection mode=""></dxo-selection>
+          <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+          <!-- <dxo-scrolling mode="auto"></dxo-scrolling> -->
+  
+          <!-- <dxi-column cellTemplate="cellSTT" caption="STT" [width]="45" alignment="center" cssClass="vertical-middle"></dxi-column> -->
+          <dxi-column dataField="MaNguonXangDau" caption="Mã" [width]="100" ></dxi-column>
+          <dxi-column dataField="TenNguonXangDau" caption="Nhóm nguồn xăng dầu" [minWidth]="200" >
+          </dxi-column>
+          <dxi-column cellTemplate="cellAction" [width]="45" alignment="center" [showInColumnChooser]="false"
+            cssClass="vertical-middle"></dxi-column>
+          <div appPermission appRole="DM_NGUONXANGDAU" permissionCode="DELETE" class="rowAction"
+            *dxTemplate="let row of 'cellAction'">
+            <span class="dx-icon-close" (click)="delete(row.data.MaNguonXangDau, row.data.TenNguonXangDau)"></span>
+          </div>
+        </dx-data-grid>
+      </div>
+      <!-- End Grid -->
+      <div class="paginator">
+        <app-paginator [(page)]="pageIndex" [(pageSize)]="pageSize" [totalRows]="totalRows" [pageSizes]="pageSizes"
+          (onPageChanged)="pageChanged($event)" (onPageSizeChanged)="pageSizeChanged($event)"></app-paginator>
+      </div>
+    </div>
+  
+    <!-- Detail Extend -->
+    <div *ngIf="isShowDetail" class="card-detail">
+      <div class="detail-header">
+        <p>{{ state === 'detail' ? 'CHI TIẾT' : state === 'insert' ? 'THÊM MỚI' : 'CẬP NHẬT' }}</p>
+        <dx-button [icon]="dxButtonConfig.close_icon" [type]="dxButtonConfig.cancel_type" (click)="toggleDetail()">
+        </dx-button>
+      </div>
+      <div class="detail-content">
+        <app-form-nguonxangdau #detail [entity]="currentEntity" [listData]="allData" [state]="state">
+        </app-form-nguonxangdau>
+      </div>
+      <div class="detail-footer">
+        <dx-button appPermission appRole="DM_NGUONXANGDAU" permissionCode="UPDATE" *ngIf="state=='detail'"
+          [icon]="dxButtonConfig.edit_icon" [type]="dxButtonConfig.edit_type" text="Sửa" (click)="edit()"></dx-button>
+        <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.save_icon" [type]="dxButtonConfig.save_type" text="Lưu"
+          (click)="save()"></dx-button>
+        <dx-button *ngIf="state!='detail'" [icon]="dxButtonConfig.cancel_icon" [type]="dxButtonConfig.cancel_type"
+          text="Hủy" (click)="cancel()"></dx-button>
+      </div>
+    </div>
+    <!-- End Detail Extend -->
+  </div>
+  
+  <dx-load-panel shadingColor="rgba(0,0,0,0.4)" [(visible)]="loading"
+    [showIndicator]="true" [showPane]="false" [shading]="true" [closeOnOutsideClick]="false">
+  </dx-load-panel>
+
